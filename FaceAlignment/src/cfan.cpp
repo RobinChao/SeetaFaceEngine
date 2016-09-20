@@ -31,6 +31,7 @@
 
 
 #include "cfan.h"
+#include <string.h>
 
 /** A constructor.
   *  Initialize basic parameters.
@@ -162,14 +163,14 @@ void CCFAN::FacialPointLocate(const unsigned char *gray_im, int im_width, int im
   int right_x = left_x + bbox_w - 1;
   int right_y = left_y + bbox_h - 1;
 
-  float extend_factor = 0.15;
-  float extend_revised_y = 0.0;
+  float extend_factor = 0.05;
+  float extend_revised_y = 0.05;
 
   /*Compute the extended region of the detected face*/
-  int extend_lx = max(floor(left_x - extend_factor*bbox_w), 0);
-  int extend_rx = min(floor(right_x + extend_factor*bbox_w), im_width - 1);
-  int extend_ly = max(floor(left_y - (extend_factor - extend_revised_y)*bbox_h), 0);
-  int extend_ry = min(floor(right_y + (extend_factor + extend_revised_y)*bbox_h), im_height - 1);
+  int extend_lx = std::max(floor(left_x - extend_factor*bbox_w), double(0));
+  int extend_rx = std::min(floor(right_x + extend_factor*bbox_w), double(im_width - 1));
+  int extend_ly = std::max(floor(left_y - (extend_factor - extend_revised_y)*bbox_h), double(0));
+  int extend_ry = std::min(floor(right_y + (extend_factor + extend_revised_y)*bbox_h), double(im_height - 1));
 
   int face_w = extend_rx - extend_lx + 1;
   int face_h = extend_ry - extend_ly + 1;
@@ -204,7 +205,7 @@ void CCFAN::FacialPointLocate(const unsigned char *gray_im, int im_width, int im
   {
     for (int j = 0; j < pts_num_; j++)
     {
-      if (_isnan(fea[j * 128 + i]))
+      if (isnan(fea[j * 128 + i]))
       {
         re_fea[i*pts_num_ + j] = 0;
       }
@@ -280,7 +281,7 @@ void CCFAN::FacialPointLocate(const unsigned char *gray_im, int im_width, int im
   {
     for (int j = 0; j < pts_num_; j++)
     {
-      if (_isnan(fea[j * 128 + i]))
+      if (isnan(fea[j * 128 + i]))
       {
         re_fea[i*pts_num_ + j] = 0;
       }
@@ -392,10 +393,10 @@ void CCFAN::GetSubImg(const unsigned char *gray_im, int im_width, int im_height,
   memset(sub_img, 128, patch_size*patch_size);
   int center_x = floor(point_x + 0.5);
   int center_y = floor(point_y + 0.5);
-  int patch_left = max((center_x + 1) - patch_size / 2, 0);
-  int patch_right = min((center_x + 1) + patch_size / 2 - 1, im_width - 1);
-  int patch_top = max((center_y + 1) - patch_size / 2, 0);
-  int patch_bottom = min((center_y + 1) + patch_size / 2 - 1, im_height - 1);
+  int patch_left = std::max((center_x + 1) - patch_size / 2, 0);
+  int patch_right = std::min((center_x + 1) + patch_size / 2 - 1, im_width - 1);
+  int patch_top = std::max((center_y + 1) - patch_size / 2, 0);
+  int patch_bottom = std::min((center_y + 1) + patch_size / 2 - 1, im_height - 1);
 
   int lx = abs(patch_left - ((center_x + 1) - patch_size / 2));
   int rx = patch_size - abs(patch_right - ((center_x + 1) + patch_size / 2 - 1)) - 1;
@@ -425,7 +426,7 @@ bool CCFAN::ResizeImage(const unsigned char *src_im, int src_width, int src_heig
 
   double	lfx_scl, lfy_scl;
   if (src_width == dst_width && src_height == dst_height) {
-    std::memcpy(dst_im, src_im, src_width * src_height * sizeof(unsigned char));
+    memcpy(dst_im, src_im, src_width * src_height * sizeof(unsigned char));
     return true;
   }
 

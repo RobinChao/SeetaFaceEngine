@@ -50,17 +50,17 @@ int main(int argc, char** argv)
   detector.SetWindowStep(4, 4);
 
   // Initialize face alignment model 
-  seeta::FaceAlignment point_detector("seeta_fa_v1.0.bin");
+  seeta::FaceAlignment point_detector("../model/seeta_fa_v1.1.bin");
 
   //load image
   IplImage *img_grayscale = NULL;
-  img_grayscale = cvLoadImage("image_0001.png", 0);
+  img_grayscale = cvLoadImage("../data/image_0001.png", 0);
   if (img_grayscale == NULL)
   {
     return 0;
   }
 
-  IplImage *img_color = cvLoadImage("image_0001.png", 1);
+  IplImage *img_color = cvLoadImage("../data/image_0001.png", 1);
   int pts_num = 5;
   int im_width = img_grayscale->width;
   int im_height = img_grayscale->height;
@@ -81,7 +81,7 @@ int main(int argc, char** argv)
   image_data.num_channels = 1;
 
   // Detect faces
-  std::vector<seeta::FaceInfo> faces = detector.Detect(img_data);
+  std::vector<seeta::FaceInfo> faces = detector.Detect(image_data);
   int32_t face_num = static_cast<int32_t>(faces.size());
 
   if (face_num == 0)

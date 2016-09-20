@@ -33,13 +33,32 @@ As for speed, it takes about 5 milliseconds per face to predict the 5 facial poi
 5. Define `SEETA_EXPORTS` macro: (Project) Properities -> Configuration Properties -> C/C++ -> Preprocessor -> Preprocessor Definitions.
 6. Build.
 
+### Build in Linux
+
+``` 
+mkdir build
+``` 
+copy the "face detection lib" and "face_detection.h" to the directory "build" for building the test example.
+
+```
+cd build
+cmake ..
+make
+``` 
+
+If everything goes fine, move on to test the program. Note: you should copy the face detetion model [seeta_fd_frontal_v1.0.bin](../FaceDetection/model/seeta_fd_frontal_v1.0.bin) to the directory "build" before testing.
+
+```
+./fa_test
+``` 
+
 ### How to run SeetaFace Alignment
 
 This version is developed to detect five facial landmarks, i.e., two eyes' centers, nose tip and two mouth corners.
 To detect these facial landmarks, one should first instantiate an object of `seeta::FaceAlignment` with path of the model file.
 
 ```c++
-seeta::FaceAlignment landmark_detector("seeta_fa_v1.0.bin");
+seeta::FaceAlignment landmark_detector("seeta_fa_v1.1.bin");
 ```
 
 Then one can call `PointDetectLandmarks(ImageData gray_im, FaceInfo face_info, FacialLandmark *points)` to detect landmarks.

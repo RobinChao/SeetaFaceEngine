@@ -34,10 +34,15 @@
 
 #include <cstdint>
 
+#if defined _WIN32
 #ifdef SEETA_EXPORTS
 #define SEETA_API __declspec(dllexport)
 #else
 #define SEETA_API __declspec(dllimport)
+#endif
+
+#else
+#define SEETA_API
 #endif
 
 #define DISABLE_COPY_AND_ASSIGN(classname) \
@@ -92,6 +97,10 @@ typedef struct FaceInfo {
   double score; /**< Larger score should mean higher confidence. */
 } FaceInfo;
 
+  typedef struct {
+    double x;
+    double y;
+  } FacialLandmark;
 }  // namespace seeta
 
 #endif  // SEETA_COMMON_H_
